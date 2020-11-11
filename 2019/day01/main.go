@@ -24,7 +24,17 @@ func main() {
 		if terr != nil {
 			log.Fatal("Maaan the scanner died with error", terr)
 		}
-		sum += (tmp/3 - 2)
+		module := (tmp/3 - 2)
+		sum += module
+		extra := module/3 - 2
+		for {
+			if extra > 0 {
+				sum += extra
+			} else {
+				break
+			}
+			extra = extra/3 - 2
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
