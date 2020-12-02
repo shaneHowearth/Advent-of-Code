@@ -21,6 +21,7 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var result int
 	for scanner.Scan() {
+		var interim int
 		// split on :
 		input := strings.Split(scanner.Text(), ":")
 		// split on space
@@ -36,8 +37,13 @@ func main() {
 		if terr != nil {
 			log.Printf("top didn't convert with error %v", terr)
 		}
-		actualCount := strings.Count(input[1], rules[1])
-		if actualCount >= bottom && actualCount <= top {
+		if string(input[1][bottom]) == rules[1] {
+			interim++
+		}
+		if string(input[1][top]) == rules[1] {
+			interim++
+		}
+		if interim == 1 {
 			result++
 		}
 	}
