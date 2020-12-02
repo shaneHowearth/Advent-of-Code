@@ -29,9 +29,11 @@ func main() {
 	}
 
 	for k := range data {
-		if _, ok := data[2020-k]; ok {
-			fmt.Println(k, (2020 - k))
-			fmt.Println(k * (2020 - k))
+		for k2 := range data {
+			if _, ok := data[2020-(k+k2)]; ok {
+				fmt.Println(k, k2, 2020-(k+k2))
+				fmt.Println(k * k2 * (2020 - (k + k2)))
+			}
 		}
 	}
 
