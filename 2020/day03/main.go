@@ -17,19 +17,33 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	var result int
-	var start int
+	results := map[int]int{}
 	var row int
+	slopes := []int{1, 3, 5, 7, 1}
 	for scanner.Scan() {
-		row++
-		if row == 1 {
+		if row == 0 {
+			row++
 			continue
 		}
-		start += 3
 		text := scanner.Text()
-		if string(text[start%len(text)]) == "#" {
-			result++
+		for idx, s := range slopes {
+			start := row * s
+			if idx == 4 {
+				if row%2 != 0 {
+					continue
+				}
+				start = row * s / 2
+			}
+			if string(text[start%len(text)]) == "#" {
+				(results[idx])++
+			}
+
 		}
+		row++
+	}
+	result := 1
+	for k := range results {
+		result *= results[k]
 	}
 	fmt.Printf("Result %d\n", result)
 
