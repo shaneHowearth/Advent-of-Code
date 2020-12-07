@@ -10,14 +10,20 @@ import (
 )
 
 func check(holder []string) int {
-	results := map[rune]bool{}
+	results := map[rune]int{}
 	counter := 0
 	for group := range holder {
 		for _, v := range holder[group] {
-			if !results[v] {
-				results[v] = true
-				counter++
+			if _, ok := results[v]; !ok {
+				results[v] = 1
+			} else {
+				results[v]++
 			}
+		}
+	}
+	for k := range results {
+		if results[k] == len(holder) {
+			counter++
 		}
 	}
 	return counter
