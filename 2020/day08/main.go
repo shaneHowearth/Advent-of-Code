@@ -24,7 +24,6 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	seen := map[int]struct{}{}
 	commands := []command{}
 	for scanner.Scan() {
 		tmp := scanner.Text()
@@ -37,10 +36,22 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	// fmt.Println(commands)
+	change := 0
+
+retry:
+	seen := map[int]struct{}{}
 	position := 0
 	counter := 0
-	for {
+	switch commands[change].instr {
+	case "acc":
+		change++
+		goto retry
+	case "jmp":
+		commands[change].instr = "nop"
+	case "nop":
+		commands[change].instr = "jmp"
+	}
+	for position < len(commands) {
 		if _, ok := seen[position]; !ok {
 			seen[position] = struct{}{}
 			//execute
@@ -54,7 +65,15 @@ func main() {
 				position++
 			}
 		} else {
-			break
+			// The change was wrong have to try an different one
+			switch commands[change].instr {
+			case "jmp":
+				commands[change].instr = "nop"
+			case "nop":
+				commands[change].instr = "jmp"
+			}
+			change++
+			goto retry
 		}
 	}
 	fmt.Println(counter)
