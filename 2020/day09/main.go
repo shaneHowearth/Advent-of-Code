@@ -46,7 +46,38 @@ func main() {
 				goto next
 			}
 		}
+		// Number that isn't the sum of any pair of previous 25 vals
 		fmt.Println(input[position])
 		break
+	}
+
+	bottom := 0
+	top := 1
+	for top <= len(input) {
+		a := 0
+		for _, v := range input[bottom:top] {
+			a += v
+		}
+		if a == input[position] {
+			largest := 0
+			smallest := input[position]
+			for _, v := range input[bottom:top] {
+				if v < smallest {
+					smallest = v
+				}
+				if v > largest {
+					largest = v
+				}
+			}
+			// Smallest and largest vals in set of contiguous vals that add up
+			// to be the first number that was found
+			fmt.Println(largest + smallest)
+			break
+		}
+		if a < input[position] {
+			top++
+		} else {
+			bottom++
+		}
 	}
 }
